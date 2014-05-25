@@ -3,8 +3,6 @@
 
 https://code.google.com/p/farmhash/
 
-Note: This package does not yet support the 128-bit hash functions
-
 */
 package farmhash
 
@@ -24,6 +22,7 @@ uint64_t cHash64Seeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1)
 uint32_t cFingerprint32(const char *s, size_t len);
 uint64_t cFingerprint64(const char *s, size_t len);
 
+void cFingerprint128(const char *s, size_t len, uint64_t *hi, uint64_t *lo);
 
 */
 import "C"
@@ -63,4 +62,11 @@ func Fingerprint32(s []byte) uint32 {
 // Fingerprint64 is a 64-bit fingerprint function for byte-slices
 func Fingerprint64(s []byte) uint64 {
 	return uint64(C.cFingerprint64((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s))))
+}
+
+// Fingerprint128 is a 128-bit fingerprint function for byte-slices
+func Fingerprint128(s []byte) (uint64, uint64) {
+	var hi, lo uint64
+	C.cFingerprint128((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), (*C.uint64_t)(unsafe.Pointer(&hi)), (*C.uint64_t)(unsafe.Pointer(&lo)))
+	return hi, lo
 }

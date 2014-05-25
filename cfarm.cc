@@ -15,4 +15,10 @@ uint64_t cHash64Seeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1)
 uint32_t cFingerprint32(const char *s, size_t len) { return util::Fingerprint32(s, len); }
 uint64_t cFingerprint64(const char *s, size_t len) { return util::Fingerprint64(s, len); }
 
+void cFingerprint128(const char *s, size_t len, uint64_t *hi, uint64_t *lo) {
+    util::uint128_t f128 = util::Fingerprint128(s, len);
+    *lo = util::Uint128Low64(f128);
+    *hi = util::Uint128High64(f128);
+}
+
 }

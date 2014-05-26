@@ -25,7 +25,7 @@ uint64_t cFingerprint64(const char *s, size_t len);
 uint64_t cHash128(const char *s, size_t len, uint64_t *lo, uint64_t *hi);
 uint64_t cHash128Seeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1, uint64_t *lo, uint64_t *hi);
 
-void cFingerprint128(const char *s, size_t len, uint64_t *hi, uint64_t *lo);
+void cFingerprint128(const char *s, size_t len, uint64_t *lo, uint64_t *hi);
 
 */
 import "C"
@@ -80,8 +80,7 @@ func Fingerprint64(s []byte) uint64 {
 }
 
 // Fingerprint128 is a 128-bit fingerprint function for byte-slices
-func Fingerprint128(s []byte) (uint64, uint64) {
-	var hi, lo uint64
-	C.cFingerprint128((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), (*C.uint64_t)(unsafe.Pointer(&hi)), (*C.uint64_t)(unsafe.Pointer(&lo)))
-	return hi, lo
+func Fingerprint128(s []byte) (lo, hi uint64) {
+	C.cFingerprint128((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), (*C.uint64_t)(unsafe.Pointer(&lo)), (*C.uint64_t)(unsafe.Pointer(&hi)))
+	return lo, hi
 }

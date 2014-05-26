@@ -22,6 +22,9 @@ uint64_t cHash64Seeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1)
 uint32_t cFingerprint32(const char *s, size_t len);
 uint64_t cFingerprint64(const char *s, size_t len);
 
+uint64_t cHash128(const char *s, size_t len, uint64_t *lo, uint64_t *hi);
+uint64_t cHash128Seeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1, uint64_t *lo, uint64_t *hi);
+
 void cFingerprint128(const char *s, size_t len, uint64_t *hi, uint64_t *lo);
 
 */
@@ -52,6 +55,18 @@ func Hash64Seed(s []byte, seed uint64) uint64 {
 // Hash64Seeds hashes a byte slice and two uint64 seeds and returns a uint64 hash value
 func Hash64Seeds(s []byte, seed0, seed1 uint64) uint64 {
 	return uint64(C.cHash64Seeds((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed0), C.uint64_t(seed1)))
+}
+
+// Hash128Seeds is a 128-bit hash function for byte-slices and a 128-bit seed
+func Hash128Seeds(s []byte, seed0, seed1 uint64) (lo, hi uint64) {
+	C.cHash128Seeds((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed0), C.uint64_t(seed1), (*C.uint64_t)(unsafe.Pointer(&lo)), (*C.uint64_t)(unsafe.Pointer(&hi)))
+	return lo, hi
+}
+
+// Hash128 is a 128-bit hash function for byte-slices
+func Hash128(s []byte) (lo, hi uint64) {
+	C.cHash128((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), (*C.uint64_t)(unsafe.Pointer(&lo)), (*C.uint64_t)(unsafe.Pointer(&hi)))
+	return lo, hi
 }
 
 // Fingerprint32 is a 32-bit fingerprint function for byte-slices

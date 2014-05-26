@@ -15,15 +15,15 @@ package farmhash
 uint32_t cHash32(const char *s, size_t len);
 uint64_t cHash64(const char *s, size_t len);
 
-uint32_t cHash32Seed(const char *s, size_t len, uint32_t seed);
-uint64_t cHash64Seed(const char *s, size_t len, uint64_t seed);
-uint64_t cHash64Seeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1);
+uint32_t cHash32WithSeed(const char *s, size_t len, uint32_t seed);
+uint64_t cHash64WithSeed(const char *s, size_t len, uint64_t seed);
+uint64_t cHash64WithSeeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1);
 
 uint32_t cFingerprint32(const char *s, size_t len);
 uint64_t cFingerprint64(const char *s, size_t len);
 
 uint64_t cHash128(const char *s, size_t len, uint64_t *lo, uint64_t *hi);
-uint64_t cHash128Seeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1, uint64_t *lo, uint64_t *hi);
+uint64_t cHash128WithSeed(const char *s, size_t len, uint64_t seed0, uint64_t seed1, uint64_t *lo, uint64_t *hi);
 
 void cFingerprint128(const char *s, size_t len, uint64_t *lo, uint64_t *hi);
 
@@ -42,24 +42,24 @@ func Hash64(s []byte) uint64 {
 	return uint64(C.cHash64((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s))))
 }
 
-// Hash32Seed hashes a byte slice and a uint32 seed and returns a uint32 hash value
-func Hash32Seed(s []byte, seed uint32) uint32 {
-	return uint32(C.cHash32Seed((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint32_t(seed)))
+// Hash32WithSeed hashes a byte slice and a uint32 seed and returns a uint32 hash value
+func Hash32WithSeed(s []byte, seed uint32) uint32 {
+	return uint32(C.cHash32WithSeed((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint32_t(seed)))
 }
 
-// Hash64Seed hashes a byte slice and a uint64 seed and returns a uint64 hash value
-func Hash64Seed(s []byte, seed uint64) uint64 {
-	return uint64(C.cHash64Seed((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed)))
+// Hash64WithSeed hashes a byte slice and a uint64 seed and returns a uint64 hash value
+func Hash64WithSeed(s []byte, seed uint64) uint64 {
+	return uint64(C.cHash64WithSeed((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed)))
 }
 
-// Hash64Seeds hashes a byte slice and two uint64 seeds and returns a uint64 hash value
-func Hash64Seeds(s []byte, seed0, seed1 uint64) uint64 {
-	return uint64(C.cHash64Seeds((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed0), C.uint64_t(seed1)))
+// Hash64WithSeeds hashes a byte slice and two uint64 seeds and returns a uint64 hash value
+func Hash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
+	return uint64(C.cHash64WithSeeds((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed0), C.uint64_t(seed1)))
 }
 
-// Hash128Seeds is a 128-bit hash function for byte-slices and a 128-bit seed
-func Hash128Seeds(s []byte, seed0, seed1 uint64) (lo, hi uint64) {
-	C.cHash128Seeds((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed0), C.uint64_t(seed1), (*C.uint64_t)(unsafe.Pointer(&lo)), (*C.uint64_t)(unsafe.Pointer(&hi)))
+// Hash128WithSeed is a 128-bit hash function for byte-slices and a 128-bit seed
+func Hash128WithSeed(s []byte, seed0, seed1 uint64) (lo, hi uint64) {
+	C.cHash128WithSeed((*C.char)(unsafe.Pointer(&s[0])), C.size_t(len(s)), C.uint64_t(seed0), C.uint64_t(seed1), (*C.uint64_t)(unsafe.Pointer(&lo)), (*C.uint64_t)(unsafe.Pointer(&hi)))
 	return lo, hi
 }
 

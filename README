@@ -1,3 +1,5 @@
 go-farmhash is cgo bindings for Google's Farmhash
 
 godoc: http://godoc.org/github.com/dgryski/go-farmhash
+
+For a pure-Go version, please see https://github.com/dgryski/go-farm

@@ -1,0 +1,77 @@
+# go-farmhash
+
+go-farmhash is cgo bindings for Google's Farmhash
+
+godoc: http://godoc.org/github.com/dgryski/go-farmhash
+
+For a pure-Go version, please see https://github.com/dgryski/go-farm
+
+## Benchmarks
+
+In short, the native go implementation does better with small inputs. For larg inputs, the overhead from calling cgo becomes negligible. 
+
+```
+$ go version
+go version go1.14.3 linux/amd64
+$ go test -bench=.*
+BenchmarkNativeHash32/8-4 	76823796	        14.8 ns/op	 539.54 MB/s
+BenchmarkNativeHash32/16-4         	76319841	        16.6 ns/op	 965.83 MB/s
+BenchmarkNativeHash32/32-4         	51651475	        22.3 ns/op	1433.06 MB/s
+BenchmarkNativeHash32/40-4         	57671902	        21.7 ns/op	1842.45 MB/s
+BenchmarkNativeHash32/60-4         	42606878	        26.8 ns/op	2239.95 MB/s
+BenchmarkNativeHash32/64-4         	34446031	        30.5 ns/op	2097.05 MB/s
+BenchmarkNativeHash32/72-4         	39401316	        30.9 ns/op	2332.84 MB/s
+BenchmarkNativeHash32/80-4         	37483617	        32.8 ns/op	2442.03 MB/s
+BenchmarkNativeHash32/100-4        	32010295	        38.5 ns/op	2594.46 MB/s
+BenchmarkNativeHash32/150-4        	24560088	        48.1 ns/op	3118.69 MB/s
+BenchmarkNativeHash32/200-4        	20644939	        57.5 ns/op	3479.01 MB/s
+BenchmarkNativeHash32/250-4        	16497544	        74.8 ns/op	3344.15 MB/s
+BenchmarkNativeHash32/512-4        	 8591954	       133 ns/op	3862.64 MB/s
+BenchmarkNativeHash32/1024-4       	 4581540	       258 ns/op	3968.98 MB/s
+BenchmarkNativeHash32/8192-4       	  613780	      1974 ns/op	4150.65 MB/s
+BenchmarkCGoHash32/8-4             	13962134	        84.3 ns/op	  94.94 MB/s
+BenchmarkCGoHash32/16-4            	14170136	        84.0 ns/op	 190.59 MB/s
+BenchmarkCGoHash32/32-4            	13512770	        88.4 ns/op	 362.03 MB/s
+BenchmarkCGoHash32/40-4            	13352394	        93.5 ns/op	 427.58 MB/s
+BenchmarkCGoHash32/60-4            	12642135	        91.9 ns/op	 652.80 MB/s
+BenchmarkCGoHash32/64-4            	12317784	        97.4 ns/op	 657.22 MB/s
+BenchmarkCGoHash32/72-4            	12122372	        97.8 ns/op	 736.37 MB/s
+BenchmarkCGoHash32/80-4            	11548503	        97.6 ns/op	 819.31 MB/s
+BenchmarkCGoHash32/100-4           	11541694	       103 ns/op	 970.14 MB/s
+BenchmarkCGoHash32/150-4           	10387401	       115 ns/op	1300.11 MB/s
+BenchmarkCGoHash32/200-4           	 9601642	       128 ns/op	1557.94 MB/s
+BenchmarkCGoHash32/250-4           	 8544993	       141 ns/op	1779.25 MB/s
+BenchmarkCGoHash32/512-4           	 6028083	       205 ns/op	2493.39 MB/s
+BenchmarkCGoHash32/1024-4          	 3817239	       327 ns/op	3129.57 MB/s
+BenchmarkCGoHash32/8192-4          	  520722	      2092 ns/op	3915.53 MB/s
+BenchmarkNativeHash64/8-4          	110875354	         9.77 ns/op	 819.00 MB/s
+BenchmarkNativeHash64/16-4         	122250388	        10.2 ns/op	1573.72 MB/s
+BenchmarkNativeHash64/32-4         	100000000	        12.5 ns/op	2568.48 MB/s
+BenchmarkNativeHash64/40-4         	80330899	        15.1 ns/op	2649.50 MB/s
+BenchmarkNativeHash64/60-4         	74184246	        15.0 ns/op	4007.28 MB/s
+BenchmarkNativeHash64/64-4         	72557742	        15.0 ns/op	4260.49 MB/s
+BenchmarkNativeHash64/72-4         	37033506	        30.5 ns/op	2363.20 MB/s
+BenchmarkNativeHash64/80-4         	34137278	        30.4 ns/op	2632.01 MB/s
+BenchmarkNativeHash64/100-4        	22012328	        49.6 ns/op	2017.24 MB/s
+BenchmarkNativeHash64/150-4        	17564976	        65.0 ns/op	2308.34 MB/s
+BenchmarkNativeHash64/200-4        	14544788	        80.1 ns/op	2495.41 MB/s
+BenchmarkNativeHash64/250-4        	14457513	        80.0 ns/op	3123.13 MB/s
+BenchmarkNativeHash64/512-4        	12711664	        89.8 ns/op	5702.61 MB/s
+BenchmarkNativeHash64/1024-4       	 7847979	       151 ns/op	6775.83 MB/s
+BenchmarkNativeHash64/8192-4       	  966537	      1043 ns/op	7853.53 MB/s
+BenchmarkCGoHash64/8-4             	14374410	        81.0 ns/op	  98.73 MB/s
+BenchmarkCGoHash64/16-4            	14255317	        81.3 ns/op	 196.72 MB/s
+BenchmarkCGoHash64/32-4            	13944500	        81.1 ns/op	 394.56 MB/s
+BenchmarkCGoHash64/40-4            	13916424	        84.7 ns/op	 472.27 MB/s
+BenchmarkCGoHash64/60-4            	13958097	        83.9 ns/op	 715.16 MB/s
+BenchmarkCGoHash64/64-4            	13411842	        83.3 ns/op	 768.44 MB/s
+BenchmarkCGoHash64/72-4            	13409832	        85.2 ns/op	 844.83 MB/s
+BenchmarkCGoHash64/80-4            	13196421	        89.0 ns/op	 898.99 MB/s
+BenchmarkCGoHash64/100-4           	12160627	        95.3 ns/op	1049.23 MB/s
+BenchmarkCGoHash64/150-4           	11220139	       108 ns/op	1394.01 MB/s
+BenchmarkCGoHash64/200-4           	11025075	       108 ns/op	1855.99 MB/s
+BenchmarkCGoHash64/250-4           	11212993	       108 ns/op	2325.51 MB/s
+BenchmarkCGoHash64/512-4           	 9172786	       126 ns/op	4061.90 MB/s
+BenchmarkCGoHash64/1024-4          	 7215590	       166 ns/op	6180.95 MB/s
+BenchmarkCGoHash64/8192-4          	 1719264	       709 ns/op	11553.34 MB/s
+```
